@@ -1,0 +1,921 @@
+/* ==================== 基础样式 ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+    --bg-dark: #0d0d1a;
+    --bg-panel: rgba(20, 20, 40, 0.92);
+    --bg-card: rgba(30, 30, 55, 0.95);
+    --border: rgba(80, 80, 120, 0.5);
+    --border-hover: rgba(255, 215, 0, 0.6);
+    --gold: #ffd700;
+    --gold-dark: #b8960a;
+    --red: #ff4444;
+    --green: #44ff88;
+    --blue: #4488ff;
+    --purple: #aa44ff;
+    --cyan: #00ffee;
+    --text: #e8e8f0;
+    --text-dim: #8888aa;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    --glow-gold: 0 0 15px rgba(255, 215, 0, 0.3);
+    --glow-red: 0 0 15px rgba(255, 68, 68, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg-dark);
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* ==================== UI覆盖层 ==================== */
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.ui-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    animation: fadeIn 0.3s ease;
+}
+
+.ui-screen.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
+    50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); }
+}
+
+/* ==================== 按钮样式 ==================== */
+.menu-btn {
+    padding: 14px 36px;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    background: linear-gradient(135deg, #3a3a5a, #2a2a4a);
+    color: var(--text);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 180px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, #4a4a6a, #3a3a5a);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-gold);
+}
+
+.menu-btn:hover::before {
+    left: 100%;
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+}
+
+.menu-btn-primary {
+    background: linear-gradient(135deg, #b8960a, #8b6914);
+    border-color: var(--gold);
+    color: #fff;
+}
+
+.menu-btn-primary:hover {
+    background: linear-gradient(135deg, #d4af0a, #b8960a);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.menu-btn-secondary {
+    background: linear-gradient(135deg, #2a2a3a, #1a1a2a);
+    border-color: rgba(80, 80, 100, 0.4);
+    color: var(--text-dim);
+}
+
+.menu-btn-secondary:hover {
+    border-color: rgba(120, 120, 150, 0.6);
+    color: var(--text);
+}
+
+.menu-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ==================== 主菜单 ==================== */
+#main-menu {
+    background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.95), rgba(10, 10, 25, 0.98));
+}
+
+.game-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-bottom: 0.5rem;
+    animation: pulse 3s infinite;
+    letter-spacing: 2px;
+}
+
+.game-subtitle {
+    color: var(--text-dim);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+    letter-spacing: 3px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.controls-hint {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ==================== 角色选择 ==================== */
+#character-select {
+    background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.95), rgba(10, 10, 25, 0.98));
+    justify-content: flex-start;
+    padding-top: 25px;
+    gap: 15px;
+}
+
+.char-select-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.char-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 750px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.char-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.char-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.char-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.char-card.selected {
+    border-color: var(--gold);
+    background: rgba(255, 215, 0, 0.08);
+    box-shadow: var(--glow-gold);
+}
+
+.char-card.selected::after {
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.char-icon {
+    font-size: 2.2rem;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.char-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+.char-desc-short {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+}
+
+/* 角色详情 */
+.char-detail {
+    max-width: 750px;
+    width: 100%;
+    padding: 0 20px;
+    min-height: 160px;
+}
+
+.char-detail-hint {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 1rem;
+    padding-top: 50px;
+}
+
+.char-detail-content {
+    display: flex;
+    gap: 20px;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    animation: slideUp 0.3s ease;
+}
+
+.char-detail-left {
+    text-align: center;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.char-detail-left .char-icon {
+    font-size: 3.5rem;
+}
+
+.char-detail-left .char-name {
+    font-size: 1.2rem;
+    margin-top: 5px;
+    color: var(--gold);
+}
+
+.char-detail-right {
+    flex: 1;
+}
+
+.char-detail-right h3 {
+    font-size: 0.9rem;
+    color: var(--gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.char-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    font-size: 0.8rem;
+}
+
+.char-stat {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 6px;
+    border-radius: 3px;
+}
+
+.char-stat:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.char-stat-label {
+    color: var(--text-dim);
+}
+
+.char-stat-value {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.char-stat-value.bonus { color: var(--green); }
+.char-stat-value.penalty { color: var(--red); }
+
+.char-weapon-info {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+}
+
+.char-passive-info {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: var(--gold);
+}
+
+.char-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* ==================== 游戏HUD ==================== */
+#game-hud {
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 12px;
+    pointer-events: none;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.hud-wave, .hud-timer, .hud-enemies {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hud-wave span, .hud-timer span, .hud-enemies span {
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
+.hud-pause-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text);
+    font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.hud-pause-btn:hover {
+    background: rgba(255, 215, 0, 0.15);
+    border-color: var(--gold);
+    transform: scale(1.1);
+}
+
+.hud-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 4px;
+    gap: 16px;
+}
+
+.hud-health, .hud-xp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.health-bar, .xp-bar {
+    width: 180px;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #cc0000, #ff3333);
+    transition: width 0.3s ease;
+    width: 100%;
+    border-radius: 6px;
+    position: relative;
+}
+
+.health-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 6px 6px 0 0;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0088ff, #00ccff);
+    transition: width 0.3s ease;
+    width: 0%;
+    border-radius: 6px;
+    position: relative;
+}
+
+.xp-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 6px 6px 0 0;
+}
+
+#health-text, #level-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text);
+    min-width: 60px;
+}
+
+.hud-weapon {
+    background: var(--bg-panel);
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+#weapon-name {
+    color: var(--text);
+}
+
+#weapon-level {
+    color: var(--gold);
+    font-size: 0.75rem;
+}
+
+.hud-items {
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+}
+
+.item-slot {
+    width: 38px;
+    height: 38px;
+    background: var(--bg-panel);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+}
+
+.item-slot:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+/* ==================== 商店界面 ==================== */
+#shop-screen {
+    background: radial-gradient(ellipse at center, rgba(15, 15, 30, 0.97), rgba(8, 8, 20, 0.99));
+}
+
+#shop-screen h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.shop-timer {
+    font-size: 1.2rem;
+    color: var(--red);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.shop-items {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 1.5rem;
+    max-width: 750px;
+}
+
+.shop-item {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.shop-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--border);
+    transition: background 0.2s;
+}
+
+.shop-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+.shop-item.rarity-common { border-color: #888; }
+.shop-item.rarity-common::before { background: #888; }
+.shop-item.rarity-rare { border-color: var(--blue); }
+.shop-item.rarity-rare::before { background: var(--blue); }
+.shop-item.rarity-rare:hover { box-shadow: 0 0 15px rgba(68, 136, 255, 0.3); }
+.shop-item.rarity-epic { border-color: var(--purple); }
+.shop-item.rarity-epic::before { background: var(--purple); }
+.shop-item.rarity-epic:hover { box-shadow: 0 0 15px rgba(170, 68, 255, 0.3); }
+.shop-item.rarity-legendary { border-color: var(--gold); }
+.shop-item.rarity-legendary::before { background: var(--gold); }
+.shop-item.rarity-legendary:hover { box-shadow: var(--glow-gold); }
+
+.shop-item-icon {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.shop-item-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.shop-item-desc {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+}
+
+.shop-item-price {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.shop-gold {
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* ==================== 暂停界面 ==================== */
+#pause-screen {
+    background: rgba(10, 10, 25, 0.92);
+    backdrop-filter: blur(8px);
+}
+
+#pause-screen h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.pause-content {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 1.5rem;
+    max-width: 650px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.pause-stats, .pause-weapons {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.pause-weapons h3 {
+    font-size: 0.9rem;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stats-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.stats-header #pause-char-icon {
+    font-size: 1.8rem;
+}
+
+.stats-header #pause-char-name {
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.stat-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.stat-label {
+    color: var(--text-dim);
+}
+
+.stat-value {
+    color: var(--text);
+    font-weight: 600;
+}
+
+.weapon-entry {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.weapon-entry:hover {
+    background: rgba(255, 215, 0, 0.05);
+    border-color: rgba(255, 215, 0, 0.2);
+}
+
+.weapon-entry .weapon-icon {
+    font-size: 1.2rem;
+}
+
+.weapon-entry .weapon-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.weapon-entry .weapon-level {
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* ==================== 游戏结束 ==================== */
+#gameover-screen {
+    background: radial-gradient(ellipse at center, rgba(20, 10, 10, 0.95), rgba(10, 5, 5, 0.98));
+}
+
+#gameover-screen h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--red);
+    margin-bottom: 1.5rem;
+    text-shadow: 0 0 30px rgba(255, 68, 68, 0.4);
+}
+
+.gameover-stats {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    line-height: 2;
+    background: var(--bg-card);
+    padding: 20px 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.gameover-stats span {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+/* ==================== 升级选择 ==================== */
+#levelup-screen {
+    background: rgba(10, 10, 25, 0.92);
+    backdrop-filter: blur(8px);
+}
+
+#levelup-screen h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--cyan);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 25px rgba(0, 255, 238, 0.4);
+}
+
+#levelup-screen p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dim);
+}
+
+.levelup-options {
+    display: flex;
+    gap: 16px;
+}
+
+.levelup-option {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    min-width: 180px;
+    position: relative;
+    overflow: hidden;
+}
+
+.levelup-option::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: transparent;
+    transition: background 0.2s;
+}
+
+.levelup-option:hover {
+    border-color: var(--cyan);
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(0, 255, 238, 0.2);
+}
+
+.levelup-option:hover::before {
+    background: var(--cyan);
+}
+
+.levelup-option-icon {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.levelup-option-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--cyan);
+}
+
+.levelup-option-desc {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+}
+
+/* ==================== 滚动条 ==================== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
