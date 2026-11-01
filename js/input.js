@@ -2,7 +2,7 @@
 class InputManager {
   constructor() {
     this.keys = {};
-    this.lastKeys = {};
+    this.pressedKeys = new Set();
     this.mouse = {
       x: 0,
       y: 0,
@@ -18,6 +18,7 @@ class InputManager {
   setupListeners() {
     // 键盘事件
     window.addEventListener("keydown", (e) => {
+      if (!this.keys[e.code] && !e.repeat) this.pressedKeys.add(e.code);
       this.keys[e.code] = true;
       if (
         [
@@ -108,15 +109,12 @@ class InputManager {
 
   // 检查按键是否刚按下
   isKeyPressed(code) {
-    if (this.keys[code] && !this.lastKeys[code]) {
-      return true;
-    }
-    return false;
+    return this.pressedKeys.has(code);
   }
 
   // 更新（每帧调用）
   update() {
-    this.lastKeys = { ...this.keys };
+    this.pressedKeys.clear();
   }
 
   // 获取鼠标在世界坐标的位置
@@ -135,7 +133,7 @@ class InputManager {
   // 重置输入状态
   reset() {
     this.keys = {};
-    this.lastKeys = {};
+    this.pressedKeys.clear();
     this.mouse.left = false;
     this.mouse.right = false;
   }
